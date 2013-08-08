@@ -16,8 +16,10 @@ function gabriel:update()
     gabriel.body:applyForce(400, 0)
   elseif love.keyboard.isDown("left") then
     gabriel.body:applyForce(-400, 0)
-  elseif love.keyboard.isDown("up") and velocity.y == 0 then
-    gabriel.body:applyForce(0, -15000)
+  end
+  if love.keyboard.isDown("up") and velocity.y == 0 then
+   gabriel.body:applyLinearImpulse(0,-200)
+   gabriel.body:applyForce(velocity.x, 0)
   end
   velocity.x, velocity.y = gabriel.body:getLinearVelocity()
 end
