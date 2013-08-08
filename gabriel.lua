@@ -1,5 +1,5 @@
 gabriel = {
-  x = 0, y = 0, w = 32, h = 64, maxVelocity = 100, force = 300
+  x = 0, y = 0, w = 32, h = 64, force = 300
 }
 velocity = {x = 0, y = 0}
 force = 0
@@ -23,7 +23,7 @@ function gabriel:update()
   end
   if love.keyboard.isDown("up") and math.floor(velocity.y) == 0 then
    gabriel.body:applyLinearImpulse(0, -200)
-   gabriel.body:applyForce(force, 0)
+   gabriel.body:applyForce(velocity.x, 0)
   end
   velocity.x, velocity.y = gabriel.body:getLinearVelocity()
 end
