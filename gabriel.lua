@@ -1,22 +1,25 @@
 gabriel = {
-  x = 0,
-  y = 0
+  x = 0, y = 0, w = 32, h = 64
 }
+velocity = {x = 0, y = 0}
 
-function gabriel.load(world)
-  gabriel.player          = {}
-  gabriel.player.body     = love.physics.newBody(world, 800/2, 560)
-  gabriel.player.shape    = love.physics.newCircleShape(20)
-  gabriel.player.fixture  = love.physics.newFixture(gabriel.player.body, gabriel.player.shape, 1)
-  gabriel.player.fixture:setRestitution(1)
-end
-
-function gabriel.draw()
+function gabriel:draw()
   love.graphics.setColor(193, 47, 14)
-  love.graphics.circle(
-    "fill", 
-    gabriel.player.body:getX(), 
-    gabriel.player.body:getY(), 
-    gabriel.player.shape:getRadius()
-  )
+  love.graphics.rectangle("fill", gabriel.body:getX(), gabriel.body:getY(), gabriel.w, gabriel.h)
+  love.graphics.setColor(0, 0, 0)
+  love.graphics.print("Velocity X: " .. velocity.x, 10, 10)
+  love.graphics.print("Velocity Y: " .. velocity.y, 10, 25)
 end
+
+function gabriel:update()
+  if love.keyboard.isDown("right") then
+    gabriel.body:applyForce(400, 0)
+  elseif love.keyboard.isDown("left") then
+    gabriel.body:applyForce(-400, 0)
+  elseif love.keyboard.isDown("up") and velocity.y == 0 then
+    gabriel.body:applyForce(0, -15000)
+  end
+  velocity.x, velocity.y = gabriel.body:getLinearVelocity()
+end
+
+return gabriel
