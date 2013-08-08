@@ -35,6 +35,7 @@ function playground:init()
   gab.y       = gab.body:getY()
   gab.shape   = love.physics.newRectangleShape(gab.w/2, gab.h/2, gab.w, gab.h)
   gab.fixture = love.physics.newFixture(gabriel.body, gabriel.shape, 1)
+  gab.body:setMass(0.1)
 end
 
 function playground:draw()
