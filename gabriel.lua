@@ -1,10 +1,8 @@
 local gabriel = {
-    x = 0,
-    y = 0,
     w = 32,
     h = 64,
     force = 300,
-    speed = 200
+    speed = 13
 }
 
 local velocity = {
@@ -15,7 +13,7 @@ local velocity = {
 force = 0
 
 function gabriel:load()
-    self.body = love.physics.newBody(world, 10, 600 - objects.ground.h - gabriel.h, "dynamic")
+    self.body = love.physics.newBody(world, 10, 100, "dynamic")
     self.shape = love.physics.newRectangleShape(gabriel.w/2, gabriel.h/2, gabriel.w, gabriel.h)
     self.fixture = love.physics.newFixture(gabriel.body, gabriel.shape, 1)
 end
@@ -32,14 +30,14 @@ end
 function gabriel:update(dt)
     force = gabriel.body:getMass() * dt * gabriel.speed
 
-    if love.keyboard.isDown("right") and force <= gabriel.force then
+    if love.keyboard.isDown("right") then
         gabriel.body:setX(gabriel.body:getX() + force)
-    elseif love.keyboard.isDown("left") and force >= -gabriel.force then
+    elseif love.keyboard.isDown("left") then
         gabriel.body:setX((gabriel.body:getX() - force))
     end
 
     if love.keyboard.isDown(" ") and math.floor(velocity.y) == 0 then
-        gabriel.body:applyLinearImpulse(0, -200)
+        gabriel.body:applyLinearImpulse(0, -100)
     end
 
     velocity.x, velocity.y = gabriel.body:getLinearVelocity()
