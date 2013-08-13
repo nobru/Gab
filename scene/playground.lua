@@ -1,4 +1,4 @@
-gab = require '..gabriel'
+gabriel = require '..gabriel'
 
 local playground = {}
 
@@ -25,16 +25,20 @@ function playground:init()
   )
   objects.wallR.fixture  = love.physics.newFixture(objects.wallR.body, objects.wallR.shape)
 
-  objects.box1          = {w = 800, h = 96}
-  objects.box1.body     = love.physics.newBody(world, 800/2, 600 - (objects.ground.h/2))
-  objects.box1.shape    = love.physics.newRectangleShape(objects.ground.w, objects.ground.h)
-  objects.box1.fixture  = love.physics.newFixture(objects.ground.body, objects.ground.shape)
+  objects.box1          = {w = 64, h = 64}
+  objects.box1.body     = love.physics.newBody(world, 800/2, 480)
+  objects.box1.shape    = love.physics.newRectangleShape(objects.box1.w, objects.box1.h)
+  objects.box1.fixture  = love.physics.newFixture(objects.box1.body, objects.box1.shape)
+  objects.box2          = {w = 64, h = 128}
+  objects.box2.body     = love.physics.newBody(world, 800/2 + 64, 460)
+  objects.box2.shape    = love.physics.newRectangleShape(objects.box2.w, objects.box2.h)
+  objects.box2.fixture  = love.physics.newFixture(objects.box2.body, objects.box2.shape)
+  objects.box3          = {w = 64, h = 64}
+  objects.box3.body     = love.physics.newBody(world, 800/2 + 128, 480)
+  objects.box3.shape    = love.physics.newRectangleShape(objects.box1.w, objects.box1.h)
+  objects.box3.fixture  = love.physics.newFixture(objects.box3.body, objects.box3.shape)
 
-  gab.body    = love.physics.newBody(world, 10, 600 - objects.ground.h - gab.h, "dynamic")
-  gab.x       = gab.body:getX()
-  gab.y       = gab.body:getY()
-  gab.shape   = love.physics.newRectangleShape(gab.w/2, gab.h/2, gab.w, gab.h)
-  gab.fixture = love.physics.newFixture(gabriel.body, gabriel.shape, 1)
+  gabriel:load()
 end
 
 function playground:draw()
@@ -42,12 +46,16 @@ function playground:draw()
   love.graphics.polygon("fill", objects.ground.body:getWorldPoints(objects.ground.shape:getPoints()))
   love.graphics.polygon("fill", objects.wallL.body:getWorldPoints(objects.wallL.shape:getPoints()))
   love.graphics.polygon("fill", objects.wallR.body:getWorldPoints(objects.wallR.shape:getPoints()))
-  gab:draw()
+  love.graphics.polygon("fill", objects.box1.body:getWorldPoints(objects.box1.shape:getPoints()))
+  love.graphics.polygon("fill", objects.box2.body:getWorldPoints(objects.box2.shape:getPoints()))
+  love.graphics.polygon("fill", objects.box3.body:getWorldPoints(objects.box3.shape:getPoints()))
+
+  gabriel:draw()
 end
 
 function playground:update(dt)
   world:update(dt)
-  gab.update()
+  gabriel:update(dt)
 end
 
 return playground
