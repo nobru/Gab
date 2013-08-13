@@ -3,7 +3,8 @@ local gabriel = {
     y = 0,
     w = 32,
     h = 64,
-    force = 300
+    force = 300,
+    speed = 200
 }
 
 local velocity = {
@@ -28,19 +29,17 @@ function gabriel:draw()
     love.graphics.print("Force: " .. force, 10, 50)
 end
 
-function gabriel:update()
-    force = gabriel.body:getMass() * velocity.x * 2
+function gabriel:update(dt)
+    force = gabriel.body:getMass() * dt * gabriel.speed
 
     if love.keyboard.isDown("right") and force <= gabriel.force then
-        gabriel.body:applyForce(gabriel.force, 0)
-        gabriel.body:setFixedRotation(true)
+        gabriel.body:setX(gabriel.body:getX() + force)
     elseif love.keyboard.isDown("left") and force >= -gabriel.force then
-        gabriel.body:applyForce(-gabriel.force, 0)
+        gabriel.body:setX((gabriel.body:getX() - force))
     end
 
     if love.keyboard.isDown(" ") and math.floor(velocity.y) == 0 then
         gabriel.body:applyLinearImpulse(0, -200)
-        gabriel.body:applyForce(velocity.x, 0)
     end
 
     velocity.x, velocity.y = gabriel.body:getLinearVelocity()
