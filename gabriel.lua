@@ -3,7 +3,7 @@ local gabriel = {
   y = 0, 
   w = 32, 
   h = 64, 
-  force = 400,
+  force = 300,
   isJumping = false,
   velocity = 300
 }
@@ -25,6 +25,8 @@ function gabriel:draw()
   love.graphics.setColor(193, 47, 14)
   love.graphics.rectangle("fill", gabriel.body:getX(), gabriel.body:getY(), gabriel.w, gabriel.h)
   love.graphics.setColor(0, 0, 0)
+  love.graphics.print("Velocity X: " .. velocity.x, 10, 10)
+  love.graphics.print("Velocity Y: " .. velocity.y, 10, 25)
 end
 
 function gabriel:update(dt)
@@ -36,16 +38,15 @@ function gabriel:update(dt)
   end
 
   if love.keyboard.isDown("right") and velocity.x < self.velocity then
-    self.body:applyForce(self.force, 0)
+    self.body:applyForce(self.force * 2, 0)
     self.body:setFixedRotation(true)
   elseif love.keyboard.isDown("left") and velocity.x > -self.velocity then
-    self.body:applyForce(-gabriel.force, 0)
-  else
-    self.body:applyLinearImpulse(-velocity.x / 20, 0)
+    self.body:applyForce(-gabriel.force * 2, 0)
+  elseif (velocity.y == 0) then
+      self.body:applyLinearImpulse(-velocity.x / 10, 0)
   end
-  if love.keyboard.isDown("up") and not self.isJumping then
-   self.body:applyLinearImpulse(0, -200)
-   self.body:applyForce(velocity.x, 0)
+  if love.keyboard.isDown(" ") and not self.isJumping then
+   self.body:applyLinearImpulse(0, -188)
    self.isJumping = true
   end
   velocity.x, velocity.y = gabriel.body:getLinearVelocity()
