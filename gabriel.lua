@@ -7,7 +7,7 @@ local gabriel = {
   h = 44, 
   force = 300,
   isJumping = false,
-  velocity = 300,
+  velocity = 200,
   isStarted = false,
   sprite = 0,
   spriteId = 0
@@ -30,8 +30,8 @@ function gabriel:load()
 
   self.animations = {
       down  = anim8.newAnimation(g('1-1', 1), 0.1),
-      left  = anim8.newAnimation(g('1-3', 1), 0.05),
-      right =  anim8.newAnimation(g('1-3', 1), 0.05),
+      left  = anim8.newAnimation(g('6-8', 1), 0.07),
+      right =  anim8.newAnimation(g('1-3', 1), 0.07),
       jump  = anim8.newAnimation(g('4-4', 1), 0.1)
   }
   self.animation = self.animations.down
