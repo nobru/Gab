@@ -10,7 +10,8 @@ local gabriel = {
   velocity = 200,
   isStarted = false,
   sprite = 0,
-  spriteId = 0
+  spriteId = 0,
+  lastDirection = 0
 }
 velocity = {
   x = 0, 
@@ -29,12 +30,14 @@ function gabriel:load()
   g = anim8.newGrid(30, 44, image:getWidth(), image:getHeight())
 
   self.animations = {
-      down  = anim8.newAnimation(g('1-1', 1), 0.1),
-      left  = anim8.newAnimation(g('6-8', 1), 0.07),
-      right =  anim8.newAnimation(g('1-3', 1), 0.07),
-      jump  = anim8.newAnimation(g('4-4', 1), 0.1)
+      stopRight = anim8.newAnimation(g('1-1', 1), 0.1),
+      stopLeft  = anim8.newAnimation(g('8-8', 1), 0.1),
+      walkRight = anim8.newAnimation(g('1-3', 1), 0.08),
+      walkLeft  = anim8.newAnimation(g('8-6', 1), 0.08),
+      jumpRight = anim8.newAnimation(g('4-4', 1), 0.1),
+      jumpLeft  = anim8.newAnimation(g('5-5', 1), 0.1)
   }
-  self.animation = self.animations.down
+  self.animation = self.animations.stopRight
 end
 
 function gabriel:draw()
@@ -50,15 +53,25 @@ function gabriel:update(dt)
   if (velocity.y == 0) then
     self.isJumping = false
     self.body:applyLinearImpulse(0, 0)
-    self.animation = self.animations.down
+    if (self.lastDirection < 0) then
+      self.animation = self.animations.stopLeft
+    else
+      self.animation = self.animations.stopRight
+    end
   end
 
   if (self.isJumping) then
-    self.animation = self.animations.jump
+    if (self.lastDirection < 0) then
+      self.animation = self.animations.jumpLeft
+    else
+      self.animation = self.animations.jumpRight
+    end
   elseif (love.keyboard.isDown("right")) then
-    self.animation = self.animations.right
+    self.animation = self.animations.walkRight
+    self.lastDirection = 1
   elseif (love.keyboard.isDown("left")) then
-    self.animation = self.animations.left
+    self.animation = self.animations.walkLeft
+    self.lastDirection = -1
   end
 
   if love.keyboard.isDown("right") and velocity.x < self.velocity then
@@ -73,7 +86,7 @@ function gabriel:update(dt)
       end
   end
   if love.keyboard.isDown(" ") and not self.isJumping then
-   self.body:applyLinearImpulse(0, -120)
+   self.body:applyLinearImpulse(0, -140)
    self.isJumping = true
   end
   velocity.x, velocity.y = gabriel.body:getLinearVelocity()
