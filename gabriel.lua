@@ -7,10 +7,8 @@ local gabriel = {
   h = 44, 
   force = 300,
   isJumping = false,
-  velocity = 200,
+  velocity = 180,
   isStarted = false,
-  sprite = 0,
-  spriteId = 0,
   lastDirection = 0
 }
 velocity = {
@@ -19,8 +17,8 @@ velocity = {
 }
 
 function gabriel:load()
-  self.body     = love.physics.newBody(world, 60, 60, "dynamic")
-  self.shape    = love.physics.newRectangleShape(gabriel.w/2, gabriel.h/2, gabriel.w, gabriel.h)
+  self.body     = love.physics.newBody(world, 60, 260, "dynamic")
+  self.shape    = love.physics.newRectangleShape(gabriel.w/2, gabriel.h/2-2, gabriel.w, gabriel.h)
   self.fixture  = love.physics.newFixture(gabriel.body, gabriel.shape, 1)
   self.x        = self.body:getX()
   self.y        = self.body:getY()
@@ -32,8 +30,8 @@ function gabriel:load()
   self.animations = {
       stopRight = anim8.newAnimation(g('1-1', 1), 0.1),
       stopLeft  = anim8.newAnimation(g('8-8', 1), 0.1),
-      walkRight = anim8.newAnimation(g('1-3', 1), 0.08),
-      walkLeft  = anim8.newAnimation(g('8-6', 1), 0.08),
+      walkRight = anim8.newAnimation(g('1-3', 1), 0.07),
+      walkLeft  = anim8.newAnimation(g('8-6', 1), 0.07),
       jumpRight = anim8.newAnimation(g('4-4', 1), 0.1),
       jumpLeft  = anim8.newAnimation(g('5-5', 1), 0.1)
   }
@@ -74,11 +72,11 @@ function gabriel:update(dt)
     self.lastDirection = -1
   end
 
-  if love.keyboard.isDown("right") and velocity.x < self.velocity then
+  if love.keyboard.isDown("right") and velocity.x < self.velocity and not self.isJumping then
     self.body:applyForce(self.force, 0)
     self.body:setFixedRotation(true)
-  elseif love.keyboard.isDown("left") and velocity.x > -self.velocity then
-    self.body:applyForce(-gabriel.force, 0)
+  elseif love.keyboard.isDown("left") and velocity.x > -self.velocity and not self.isJumping then
+    self.body:applyForce(-self.force, 0)
   else
       self.body:applyLinearImpulse(-velocity.x / 20, 0)
       if self.isJumping then
@@ -86,7 +84,7 @@ function gabriel:update(dt)
       end
   end
   if love.keyboard.isDown(" ") and not self.isJumping then
-   self.body:applyLinearImpulse(0, -140)
+   self.body:applyLinearImpulse(0, -120)
    self.isJumping = true
   end
   velocity.x, velocity.y = gabriel.body:getLinearVelocity()
