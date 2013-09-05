@@ -72,10 +72,10 @@ function gabriel:update(dt)
     self.lastDirection = -1
   end
 
-  if love.keyboard.isDown("right") and velocity.x < self.velocity and not self.isJumping then
+  if love.keyboard.isDown("right") and velocity.x < self.velocity then
     self.body:applyForce(self.force, 0)
     self.body:setFixedRotation(true)
-  elseif love.keyboard.isDown("left") and velocity.x > -self.velocity and not self.isJumping then
+  elseif love.keyboard.isDown("left") and velocity.x > -self.velocity then
     self.body:applyForce(-self.force, 0)
   else
       self.body:applyLinearImpulse(-velocity.x / 20, 0)
